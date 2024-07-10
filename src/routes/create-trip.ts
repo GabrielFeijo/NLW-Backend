@@ -2,9 +2,9 @@ import { FastifyInstance } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma';
-import dayjs from 'dayjs';
 import { getMailClient } from '../lib/mail';
 import nodemailer from 'nodemailer';
+import { dayjs } from '../lib/dayjs';
 
 export const createTrip = async (app: FastifyInstance) => {
 	app.withTypeProvider<ZodTypeProvider>().post(
@@ -60,6 +60,11 @@ export const createTrip = async (app: FastifyInstance) => {
 				},
 			});
 
+			const formattedStartDate = dayjs(starts_at).format('LL');
+			const formattedEndDate = dayjs(ends_at).format('LL');
+
+			const confirmationLink = `http://localhost:3333/trips/${trip.id}/confirm`;
+
 			const mail = await getMailClient();
 
 			const message = await mail.sendMail({
@@ -71,8 +76,29 @@ export const createTrip = async (app: FastifyInstance) => {
 					name: owner_name,
 					address: owner_email,
 				},
-				subject: 'Sua viagem foi criada',
-				html: `<p>Seu destino foi criado com sucesso</p>`,
+				subject: `Confirme a sua viagem para ${destination} em ${formattedStartDate}`,
+				html: `<div style="font-family: sans-serif; font-size: 16px; line-height: 1.6">
+							<p>
+								Você solicitou a criação de uma viagem para
+								<strong>${destination}</strong> nas datas de
+								<strong>${formattedStartDate} a ${formattedEndDate}</strong>.
+							</p>
+							<p/>
+							<p>Para confirmar sua viagem, clique no link abaixo:</p>
+							<p/>
+							<p><a href="${confirmationLink}">Confirmar viagem</a></p>
+							<p/>
+							<p>
+								Caso esteja usando o dispositivo móvel, você também pode confirmar a criação
+								da viagem pelos aplicativos:
+							</p>
+							<p/>
+							<ul>
+								<li><a href="#">Aplicativo para iPhone</a></li>
+								<li><a href="#">Aplicativo para Android</a></li>
+							</ul>								
+							<p>Caso você não saiba do que se trata esse e-mail, apenas ignore-o.</p>
+						</div>`.trim(),
 			});
 
 			console.log(nodemailer.getTestMessageUrl(message));
