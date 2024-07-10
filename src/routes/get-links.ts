@@ -2,11 +2,10 @@ import { FastifyInstance } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma';
-import { dayjs } from '../lib/dayjs';
 
-export const getActivities = async (app: FastifyInstance) => {
+export const getLinks = async (app: FastifyInstance) => {
 	app.withTypeProvider<ZodTypeProvider>().get(
-		'/trips/:tripId/activities',
+		'/trips/:tripId/links',
 		{
 			schema: {
 				params: z.object({
@@ -22,11 +21,7 @@ export const getActivities = async (app: FastifyInstance) => {
 					id: tripId,
 				},
 				include: {
-					activities: {
-						orderBy: {
-							occurs_at: 'asc',
-						},
-					},
+					links: true,
 				},
 			});
 
@@ -34,25 +29,7 @@ export const getActivities = async (app: FastifyInstance) => {
 				throw new Error('Trip not found');
 			}
 
-			const differenceInDaysBetweenTripStartAndEnd = dayjs(trip.ends_at).diff(
-				trip.starts_at,
-				'days'
-			);
-
-			const activities = Array.from(
-				{ length: differenceInDaysBetweenTripStartAndEnd + 1 },
-				(_, index) => {
-					const date = dayjs(trip.starts_at).add(index, 'days');
-					return {
-						activities: trip.activities.filter((activity) => {
-							return dayjs(activity.occurs_at).isSame(date, 'day');
-						}),
-						date: date.toDate(),
-					};
-				}
-			);
-
-			return reply.status(200).send({ activities });
+			return reply.status(200).send({ links: trip.links });
 		}
 	);
 };
