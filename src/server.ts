@@ -17,6 +17,7 @@ import { updateTrip } from './routes/update-trip';
 import { getTripDetails } from './routes/get-trip-details';
 import { getParticipant } from './routes/get-participant';
 import { errorHandler } from './error-handler';
+import { env } from './env';
 
 const app = fastify();
 
@@ -46,7 +47,7 @@ app.register(getLinks);
 
 app.register(createInvite);
 
-app.listen({ port: 3333 }, (err, address) => {
+app.listen({ port: env.PORT }, (err, address) => {
 	if (err) {
 		console.error(err);
 		process.exit(1);
