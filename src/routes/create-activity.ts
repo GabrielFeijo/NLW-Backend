@@ -49,7 +49,7 @@ export const createActivity = async (app: FastifyInstance) => {
 				},
 			});
 
-			return reply.status(201).send({ activityId: activity.id });
+			return reply.status(201).send({ activity });
 		}
 	);
 };
