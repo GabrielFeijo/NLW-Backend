@@ -47,7 +47,7 @@ app.register(getLinks);
 
 app.register(createInvite);
 
-app.listen({ port: env.PORT }, (err, address) => {
+app.listen({ host: '0.0.0.0', port: env.PORT }, (err, address) => {
 	if (err) {
 		console.error(err);
 		process.exit(1);

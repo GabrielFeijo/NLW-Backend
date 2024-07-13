@@ -38,7 +38,7 @@ export const updateTrip = async (app: FastifyInstance) => {
 				throw new ClientError('End date must be after start date');
 			}
 
-			await prisma.trip.update({
+			const updateTrip = await prisma.trip.update({
 				where: {
 					id: tripId,
 				},
@@ -49,7 +49,7 @@ export const updateTrip = async (app: FastifyInstance) => {
 				},
 			});
 
-			return reply.code(200).send({ tripId: trip.id });
+			return reply.code(200).send({ trip: updateTrip });
 		}
 	);
 };
