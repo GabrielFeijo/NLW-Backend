@@ -18,6 +18,7 @@ import { getTripDetails } from './routes/get-trip-details';
 import { getParticipant } from './routes/get-participant';
 import { errorHandler } from './error-handler';
 import { env } from './env';
+import { updateParticipant } from './routes/update-participant';
 
 const app = fastify();
 
@@ -36,6 +37,7 @@ app.register(updateTrip);
 app.register(getTripDetails);
 
 app.register(confirmParticipant);
+app.register(updateParticipant);
 app.register(getParticipants);
 app.register(getParticipant);
 
