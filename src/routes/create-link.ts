@@ -40,7 +40,7 @@ export const createLink = async (app: FastifyInstance) => {
 				},
 			});
 
-			return reply.status(201).send({ linkId: link.id });
+			return reply.status(201).send({ link: link });
 		}
 	);
 };
