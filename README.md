@@ -26,12 +26,12 @@ Siga os passos abaixo para configurar e executar o projeto localmente:
 
 ```bash
 # Clone o repositório
-$ git clone https://github.com/GabrielFeijo/NLW-Journey-Backend
+$ git clone https://github.com/GabrielFeijo/NLW-Backend
 ```
 
 ```bash
 # Acesse a pasta do projeto em terminal/cmd
-$ cd NLW-Journey-Backend
+$ cd NLW-Backend
 
 # Instale as dependências
 npm install
