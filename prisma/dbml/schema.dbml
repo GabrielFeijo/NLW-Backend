@@ -1,0 +1,48 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table trips {
+  id String [pk]
+  destination String [not null]
+  starts_at DateTime [not null]
+  ends_at DateTime [not null]
+  is_confirmed Boolean [not null, default: false]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [not null]
+  participants participants [not null]
+  activities activities [not null]
+  links links [not null]
+}
+
+Table participants {
+  id String [pk]
+  name String
+  email String [not null]
+  is_confirmed Boolean [not null, default: false]
+  is_owner Boolean [not null, default: false]
+  trip trips [not null]
+  trip_id String [not null]
+}
+
+Table activities {
+  id String [pk]
+  title String [not null]
+  occurs_at DateTime [not null]
+  trip trips [not null]
+  trip_id String [not null]
+}
+
+Table links {
+  id String [pk]
+  title String [not null]
+  url String [not null]
+  trip trips [not null]
+  trip_id String [not null]
+}
+
+Ref: participants.trip_id > trips.id
+
+Ref: activities.trip_id > trips.id
+
+Ref: links.trip_id > trips.id
